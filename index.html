@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa do Som - Guia Prático de Digitação Musical</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        main {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .subtitulo {
+            text-align: center;
+            color: #666;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+        .selecao-grupo {
+            margin: 20px 0;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            border: 2px solid #ccc;
+            background-color: #fff;
+        }
+        .btn-principal {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-voltar {
+            background-color: #666;
+            padding: 8px 15px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .accordion-btn {
+            width: 100%;
+            background-color: #f1f1f1;
+            color: #444;
+            cursor: pointer;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+        .accordion-content {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+        .resultado {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #eef7ff;
+            border-left: 6px solid #0066cc;
+            border-radius: 4px;
+        }
+        .resultado h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+        .txt-posicao {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #004499;
+            margin: 10px 0;
+            letter-spacing: 1px;
+            outline: none; /* Remove a borda padrão ao focar via JS */
+        }
+        .mapa-visual {
+            font-family: monospace;
+            font-size: 1.4rem;
+            letter-spacing: 4px;
+            background: #333;
+            color: #fff;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .legenda {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        .feedback-box {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #fff9e6;
+            border: 1px dashed #e6a100;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .feedback-box a {
+            color: #b37d00;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <h1>Mapa do Som</h1>
+    <p class="subtitulo">Guia Prático de Digitação Musical</p>
+    
+    <!-- TELA INICIAL -->
+    <div id="tela-inicial">
+        <div class="selecao-grupo">
+            <label for="seletor-instrumentos">Escolha o Instrumento para iniciar:</label>
+            <select id="seletor-instrumentos">
+                <option value="flauta-barroca">Flauta Doce Barroca</option>
+                <option value="flauta-germanica" disabled>Flauta Doce Germânica (Em breve)</option>
+                <option value="violao" disabled>Violão / Guitarra (Em breve)</option>
+                <option value="teclado" disabled>Teclado / Piano (Em breve)</option>
+            </select>
+        </div>
+        <button class="btn-principal" onclick="iniciarEstudo()">Iniciar Estudo</button>
+
+        <footer>
+            <p><strong>Idealização:</strong> Adri Lima | <strong>Desenvolvimento:</strong> Anderson Carvalho</p>
+        </footer>
+    </div>
+
+    <!-- TELA DE ESTUDO -->
+    <div id="tela-estudo" style="display: none;">
+        <button class="btn-voltar" onclick="voltarParaInicio()">← Mudar Instrumento / Sair</button>
+        
+        <button class="accordion-btn" id="btn-acc" onclick="toggleAccordion()" aria-expanded="false" aria-controls="info-dedos">
+            + Como funciona a numeração dos furos? (Opcional)
+        </button>
+        <div class="accordion-content" id="info-dedos" style="display: none;">
+            <strong>Contagem contínua dos furos (de 0 a 7):</strong><br>
+            • 0: Polegar esquerdo (furo de trás)<br>
+            • 1, 2, 3: Furos da mão esquerda (cima)<br>
+            • 4, 5, 6, 7: Furos da mão direita (baixo)
+        </div>
+
+        <div class="selecao-grupo">
+            <label for="seletor-notas">Selecione a Nota:</label>
+            <select id="seletor-notas" onchange="refreshNota()">
+                <option value="">-- Selecione --</option>
+                <option value="do4">Dó 4 (Médio)</option>
+                <option value="dod4">Dó# 4 / Réb 4</option>
+                <option value="re4">Ré 4</option>
+                <option value="red4">Ré# 4 / Mib 4</option>
+                <option value="mi4">Mi 4</option>
+                <option value="fa4">Fá 4</option>
+                <option value="fad4">Fá# 4 / Solb 4</option>
+                <option value="sol4">Sol 4</option>
+                <option value="sold4">Sol# 4 / Láb 4</option>
+                <option value="la4">Lá 4</option>
+                <option value="lad4">Lá# 4 / Sib 4</option>
+                <option value="si4">Si 4</option>
+            </select>
+        </div>
+
+        <div class="resultado" id="painel-resultado" aria-live="polite">
+            <h2>Furos a Fechar:</h2>
+            <!-- tabindex="-1" permite receber foco via JavaScript sem quebrar a navegação estrutural -->
+            <p id="instrucao-texto" class="txt-posicao" tabindex="-1">Escolha uma nota na lista acima.</p>
+            
+            <div id="bloco-visual" style="display: none;">
+                <p style="margin-bottom:5px; margin-top:15px;"><strong>Mapa Visual Rápido:</strong></p>
+                <div class="mapa-visual" id="mapa-texto"></div>
+                <p class="legenda">Legenda: (0) atrás | [X] fechado | [O] aberto | [/] meio furo</p>
+            </div>
+        </div>
+
+        <section class="feedback-box">
+            <p>Dúvidas ou sugestões sobre a demo?</p>
+            <a href="mailto:euconcego@gmail.com?subject=Feedback%20-%20Mapa%20do%20Som">Enviar Feedback (euconcego@gmail.com)</a>
+        </section>
+    </div>
+</main>
+
+<script>
+    // Banco de dados corrigido e calibrado para digitação real da Barroca (0 a 7)
+    const dadosNotas = {
+        "do4": { texto: "Furos: 0, 1, 2, 3, 4, 5, 6, 7", mapa: "(0)[X] [X][X][X] [X][X][X]" },
+        "dod4": { texto: "Furos: 0, 1, 2, 3, 4, 5, 6 (meio furo)", mapa: "(0)[X] [X][X][X] [X][X][/]" }, 
+        "re4": { texto: "Furos: 0, 1, 2, 3, 4, 5, 6", mapa: "(0)[X] [X][X][X] [X][X][O]" },
+        "red4": { texto: "Furos: 0, 1, 2, 3, 4, 5 (meio furo)", mapa: "(0)[X] [X][X][X] [X][/][O]" },
+        "mi4": { texto: "Furos: 0, 1, 2, 3, 4, 5", mapa: "(0)[X] [X][X][X] [X][O][O]" },
+        "fa4": { texto: "Furos: 0, 1, 2, 3, 4, 6, 7", mapa: "(0)[X] [X][X][X] [X][O][X]" }, 
+        "fad4": { texto: "Furos: 0, 1, 2, 3, 5, 6", mapa: "(0)[X] [X][X][X] [O][X][X]" }, 
+        "sol4": { texto: "Furos: 0, 1, 2, 3", mapa: "(0)[X] [X][X][X] [O][O][O]" },
+        "sold4": { texto: "Furos: 0, 1, 2, 3 (meio furo)", mapa: "(0)[X] [X][X][/] [O][O][O]" },
+        "la4": { texto: "Furos: 0, 1, 2", mapa: "(0)[X] [X][X][O] [O][O][O]" },
+        "lad4": { texto: "Furos: 0, 1, 3, 4", mapa: "(0)[X] [X][O][X] [X][O][O]" },
+        "si4": { texto: "Furos: 0, 1", mapa: "(0)[X] [X][O][O] [O][O][O]" }
+    };
+
+    function iniciarEstudo() {
+        document.getElementById("tela-inicial").style.display = "none";
+        document.getElementById("tela-estudo").style.display = "block";
+        document.getElementById("seletor-notas").value = "";
+        
+        // Reseta o accordion
+        document.getElementById("info-dedos").style.display = "none";
+        document.getElementById("btn-acc").setAttribute("aria-expanded", "false");
+        document.getElementById("btn-acc").textContent = "+ Como funciona a numeração dos furos? (Opcional)";
+        refreshNota();
+    }
+
+    function voltarParaInicio() {
+        document.getElementById("tela-estudo").style.display = "none";
+        document.getElementById("tela-inicial").style.display = "block";
+    }
+
+    function toggleAccordion() {
+        const content = document.getElementById("info-dedos");
+        const btn = document.getElementById("btn-acc");
+        const isHidden = content.style.display === "none";
+        
+        if (isHidden) {
+            content.style.display = "block";
+            btn.setAttribute("aria-expanded", "true");
+            btn.textContent = "- Fechar guia de numeração";
+        } else {
+            content.style.display = "none";
+            btn.setAttribute("aria-expanded", "false");
+            btn.textContent = "+ Como funciona a numeração dos furos? (Opcional)";
+        }
+    }
+
+    function refreshNota() {
+        const seletor = document.getElementById("seletor-notas");
+        const notaSelecionada = seletor.value;
+        
+        const instrucaoTexto = document.getElementById("instrucao-texto");
+        const mapaTexto = document.getElementById("mapa-texto");
+        const blocoVisual = document.getElementById("bloco-visual");
+
+        if (notaSelecionada && dadosNotas[notaSelecionada]) {
+            const dados = dadosNotas[notaSelecionada];
+            instrucaoTexto.textContent = dados.texto;
+            mapaTexto.textContent = dados.mapa;
+            blocoVisual.style.display = "block";
+            
+            // Otimização de usabilidade: foca o texto para leitura imediata
+            instrucaoTexto.focus();
+        } else {
+            instrucaoTexto.textContent = "Escolha uma nota na lista acima.";
+            blocoVisual.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
