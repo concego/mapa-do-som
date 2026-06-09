@@ -198,7 +198,7 @@
                     <option value="si4">Si 4</option>
                 </optgroup>
                 <optgroup label="Segunda Oitava (Agudos)">
-                    <option value="do5">Dó 5</option>
+                    <option value="do5">Dó 5 (Médio-Agudo)</option>
                     <option value="dod5">Dó# 5 / Réb 5</option>
                     <option value="re5">Ré 5</option>
                     <option value="red5">Ré# 5 / Mib 5</option>
@@ -264,12 +264,12 @@
     // Banco de dados puro com estados dos furos para o SVG (C = Fechado, O = Aberto, M = Meio)
     const dadosNotas = {
         "do4": { texto: "Furos: 0, 1, 2, 3, 4, 5, 6, 7", furos: ["C","C","C","C","C","C","C","C"] },
-        "dod4": { texto: "Furos: 0, 1, 2, 3, 4, 5, 6 (meio furo)", furos: ["C","C","C","C","C","C","M","O"] }, 
+        "dod4": { texto: "Furos: 0, 1, 2, 3, 4, 5, 6, 7 (meio furo)", furos: ["C","C","C","C","C","C","C","M"] }, 
         "re4": { texto: "Furos: 0, 1, 2, 3, 4, 5, 6", furos: ["C","C","C","C","C","C","C","O"] },
-        "red4": { texto: "Furos: 0, 1, 2, 3, 4, 5 (meio furo)", furos: ["C","C","C","C","C","M","O","O"] },
+        "red4": { texto: "Furos: 0, 1, 2, 3, 4, 5, 6 (meio furo)", furos: ["C","C","C","C","C","C","M","O"] },
         "mi4": { texto: "Furos: 0, 1, 2, 3, 4, 5", furos: ["C","C","C","C","C","C","O","O"] },
         "fa4": { texto: "Furos: 0, 1, 2, 3, 4, 6, 7", furos: ["C","C","C","C","C","O","C","C"] }, 
-        "fad4": { texto: "Furos: 0, 1, 2, 3, 5, 6", furos: ["C","C","C","C","O","C","C","O"] }, 
+        "fad4": { texto: "Furos: 0, 1, 2, 3, 4 (meio furo), 5, 6", furos: ["C","C","C","C","M","C","C","O"] }, 
         "sol4": { texto: "Furos: 0, 1, 2, 3", furos: ["C","C","C","C","O","O","O","O"] },
         "sold4": { texto: "Furos: 0, 1, 2, 3 (meio furo)", furos: ["C","C","C","M","O","O","O","O"] },
         "la4": { texto: "Furos: 0, 1, 2", furos: ["C","C","C","O","O","O","O","O"] },
@@ -291,7 +291,7 @@
         "dod6": { texto: "Furos: 0 (meio furo), 1, 2, 4, 5, 6", furos: ["M","C","C","O","C","C","C","O"] },
         "re6": { texto: "Furos: 0 (meio furo), 1, 3, 4", furos: ["M","C","O","C","C","O","O","O"] },
         "red6": { texto: "Furos: 0 (meio furo), 1, 3, 4, 6, 7", furos: ["M","C","O","C","C","O","C","C"] },
-        "mi6": { texto: "Furos: 0 (meio furo), 1, 2, 4, 5 (furos 6 e 7 fechados pela metade)", furos: ["M","C","C","O","C","C","M","M"] },
+        "mi6": { texto: "Furos: 0 (meio furo), 1, 2, 4, 5, 6 (meio furo), 7 (meio furo)", furos: ["M","C","C","O","C","C","M","M"] },
         "fa6": { texto: "Furos: 0 (meio furo), 1, 4, 5", furos: ["M","C","O","O","C","C","O","O"] },
         "fad6": { texto: "Furos: 0 (meio furo), 1, 2, 3, 4, 5", furos: ["M","C","C","C","C","C","O","O"] },
         "sol6": { texto: "Furos: 0 (meio furo), 1, 3, 4, 6", furos: ["M","C","O","C","C","O","C","O"] },
@@ -342,7 +342,8 @@
 
         if (notaSelecionada && dadosNotas[notaSelecionada]) {
             const dados = dadosNotas[notaSelecionada];
-            instrucaoTexto.textContent = dados.texto;
+            const notaFormatada = seletor.options[seletor.selectedIndex].text;
+            instrucaoTexto.textContent = `${notaFormatada}. Digitação: ${dados.texto}`;
             blocoVisual.style.display = "block";
             
             // Renderiza as cores no SVG dinamicamente para quem enxerga
@@ -352,9 +353,7 @@
                     if (estado === "C") {
                         furoEl.setAttribute("fill", "#0066cc"); // Fechado (Azul)
                     } else if (estado === "M") {
-                        furoEl.setAttribute("fill", "url(#gradient-meio)"); // Meio furo (Lógica tratada abaixo)
-                        // Como gradientes em SVG de arquivo único podem falhar em editores simples, usamos uma cor padrão de meio termo (Laranja/Amarelo) para segurança e simplicidade visual
-                        furoEl.setAttribute("fill", "#ff9900"); 
+                        furoEl.setAttribute("fill", "#ff9900"); // Meio furo (Cor sólida para simplicidade)
                     } else {
                         furoEl.setAttribute("fill", "#e0e0e0"); // Aberto (Cinza claro)
                     }
